@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>✨ Random Task QR Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            color: #2e2e2e;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #qrContainer {
+            width: 200px;
+            height: 200px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-generate {
+            margin-top: 25px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-generate:active {
+            transform: scale(0.97);
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 13px;
+            text-align: center;
+            color: #444;
+            opacity: 0.75;
+        }
+
+        /* Tablet and up */
+        @media (min-width: 600px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            #qrContainer {
+                width: 240px;
+                height: 240px;
+            }
+
+            .btn-generate {
+                font-size: 18px;
+                padding: 14px 28px;
+            }
+
+            .footer {
+                font-size: 14px;
+            }
+        }
+
+        /* Desktop */
+        @media (min-width: 992px) {
+            body {
+                padding: 60px;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>✨ Scan for a Surprise Task</h1>
+
+    <div id="qrContainer"></div>
+
+    <button class="btn-generate" onclick="generateQR()">Generate New QR</button>
+
+    <div class="footer">
+        Made with ❤️ just for your curious soul.
+    </div>
+
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        const dataForRandom = [
+            // 🧠 Mind/Reflection Tasks
+            "Write down 3 things you're grateful for.",
+            "Close your eyes and take 5 deep breaths.",
+            "Describe your mood using only colors.",
+            "Think of a childhood memory that makes you smile.",
+            "Write a quick 2-line poem about your day.",
+            "List 3 things you love about yourself.",
+            "Look around and name everything that's blue.",
+            "Imagine your perfect day—describe it in 1 sentence.",
+            "Name one thing you learned this week.",
+            "Mentally wish good luck to 3 random people.",
+
+            // 🧘 Physical/Wellness Tasks
+            "Do 10 squats.",
+            "Stretch your arms over your head and hold for 10 seconds.",
+            "Walk around the room like a crab.",
+            "Drink a glass of water.",
+            "Stand on one foot for 30 seconds.",
+            "Roll your shoulders backward 5 times.",
+            "Do 5 wall push-ups.",
+            "Try to balance on your toes for 20 seconds.",
+            "Massage your temples gently.",
+            "Shake out your arms like spaghetti noodles.",
+
+            // 🎨 Creative/Fun Tasks
+            "Invent a silly superhero name and describe their power.",
+            "Doodle something without lifting your pen.",
+            "Write a tweet without using the letter 'e'.",
+            "Hum your favorite theme song.",
+            "Take a photo of something that makes you happy.",
+            "Make a paper airplane and fly it.",
+            "Name a fictional character you’d love to meet.",
+            "Write a short dialogue between a cat and a dog.",
+            "Draw your dream house in 30 seconds.",
+            "Try to write your name with your non-dominant hand.",
+
+            // 🤪 Silly/Dare Tasks
+            "Make 3 animal noises.",
+            "Talk like a pirate for 1 minute.",
+            "Spin around 5 times and try to walk straight.",
+            "Make the weirdest face you can.",
+            "Say the alphabet backwards (or try!).",
+            "Mime brushing your teeth and combing hair at once.",
+            "Try to hop on one leg while clapping.",
+            "Pretend you're a potato for 10 seconds.",
+            "Name 5 things you can do with a banana (be creative!).",
+            "Do your best fake sneeze.",
+
+            // 🎉 Bonus Quick Tasks
+            "Do 10 jumping jacks!",
+            "Send a compliment to someone right now.",
+            "Try to touch your toes without bending your knees.",
+            "Draw a cat with your eyes closed.",
+            "Speak in a robot voice for the next 2 minutes.",
+            "Sing your favorite song out loud!",
+            "Take a 1-minute dance break.",
+            "Balance a book on your head for 30 seconds.",
+            "Do your best celebrity impression.",
+            "Walk backwards for the next 10 steps.",
+            "Try to whistle a tune you've never whistled before.",
+            "Invent a new handshake with someone nearby.",
+            "Act like a chicken until someone notices.",
+            "Tell a joke—even if it's bad!",
+            "Name 5 fruits in 10 seconds.",
+            "Make up a new word and define it.",
+            "Do your best evil laugh!",
+            "Pretend you're in slow motion for 30 seconds.",
+            "Write a haiku about your current mood.",
+            "Give your best runway walk like a fashion model."
+        ];
+
+        const qrContainer = document.getElementById("qrContainer");
+        const size = 240;
+
+        let qrCode = new QRCode(qrContainer, {
+            text: "",
+            width: size,
+            height: size,
+            colorDark: "#000000",
+            colorLight: "#ffffff"
+        });
+
+        function generateQR() {
+            const randomIndex = Math.floor(Math.random() * dataForRandom.length);
+            const task = dataForRandom[randomIndex];
+            qrCode.makeCode(task);
+        }
+
+        // Generate one QR on load
+        generateQR();
+    </script>
+</body>
+</html>
